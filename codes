@@ -1,0 +1,308 @@
+pt = "ABCD"
+pt = list(pt)
+key = 4
+new = ''
+
+
+for i in pt:
+  t = ord(i)
+  t = t + key 
+  if t>90:
+    t = t-90+64
+  new = new + chr(t)
+
+print(new)
+
+-----------------------------------------------------
+new = list(new)
+old = ""
+for i in new:
+  t = ord(i)
+  t = t-key
+  if t<65:
+    t=t+26
+  old = old + chr(t)
+print(old)
+
+--------------------------------------------------------
+
+# 65-90, 97-122
+# Encryption
+P="UvXx"
+K=4
+C=""
+for i in range(len(P)):
+    val=ord(P[i])
+    if val>=65 and val<=90: #caps
+        val+=K
+        if(val>90):
+            C+=(chr(val-90 + 64))
+        else:
+            C+=(chr(val))
+    elif val>=97 and val<=122:
+        val+=K
+        if(val>122):
+            C+=(chr(val-122 + 96))
+        else:
+            C+=(chr(val))
+    else:
+        print("Enter valid plaintext")
+
+print(C)
+
+# Decryption
+P1=""
+for i in range(len(C)):
+    val=ord(C[i])
+    if val>=65 and val<=90: #caps
+        val-=K
+        if(val<65):
+            P1+=(chr(val+90 - 64))
+        else:
+            P1+=(chr(val))
+    elif val>=97 and val<=122:
+        val-=K
+        if(val<=96):
+            P1+=(chr(val+122 - 96))
+        else:
+            P1+=(chr(val))
+    else:
+        print("Enter valid plaintext")
+
+print(P1)
+-----------------------------------------------------
+pt = "ACT"
+key = "GYBNQKURP"
+x = np.zeros(3)
+y = np.zeros((3,3))
+
+for i in range(len(pt)):
+  x[i] = ord(pt[i])-65
+
+t=0
+for i in range(3):
+  for j in range(3):
+    y[i,j] = ord(key[t])-65
+    t = t+1
+
+ans = np.matmul(y,x)
+
+print(ans)
+
+for i in range(ans.shape[0]):
+  ans[i] = ans[i]%26
+
+print(ans)
+
+encr = ""
+for i in ans:
+  encr=encr+chr(65+int(i))
+
+
+print(encr)
+-----------------------------------------------------
+import math
+pt="POH"
+key = "GYBNQKURP"
+x = np.zeros(3)
+y = np.zeros((3,3))
+
+for i in range(3):
+  x[i]=ord(pt[i])-65
+
+t=0
+for i in range(3):
+  for j in range(3):
+    y[i,j]=ord(key[t])-65
+    t = t+1
+
+
+deter=np.linalg.det(y) % 26
+adj = np.zeros((3,3))
+
+for i in range(3):
+  for j in range(3):
+    temp = y.copy()
+    temp = np.delete(temp,i,axis=0)
+    temp = np.delete(temp,j,axis=1)
+    temp = (-1)**(i+j)*np.linalg.det(temp)
+    adj[i,j] = temp
+
+adj = ((adj.T) % 26)
+
+m=26
+for i in range(1,26):
+  if (((deter%m) * (i%m)) % m == 1):
+    deter = i
+
+inv = (deter*adj) %26
+
+ans=np.matmul(inv,x)
+
+
+encr = ""
+for i in ans:
+  encr = encr + chr(65+(round(int(i),0))%26)
+
+print(encr)
+-----------------------------------------------------
+pt = "L"
+key = "MONARCHY"
+pop = np.zeros(25)
+pop=pop.astype('str')
+
+for t in range(len(key)):
+  if key[t]=='J':
+    key[t] = 'I'
+    continue
+  pop[t] = key[t]
+
+  t=t+1
+
+for j in string.ascii_uppercase:
+  if j not in pop and j!='J':
+    if t<25:
+      pop[t] = j
+      t=t+1
+    else:
+      break
+
+pop = pop.reshape(5,5)
+
+print (pop)
+print()
+print()
+
+PT=""
+i=0
+while(i<len(pt)):
+  if i+1<len(pt):
+    if pt[i]!=pt[i+1]:
+      PT=PT+pt[i]
+      PT=PT+pt[i+1]
+      i=i+2
+    else:
+      PT=PT+pt[i]
+      PT=PT+'X'   
+      i=i+1
+  else:
+    PT=PT+pt[i]
+    i=i+1
+
+if len(PT)%2==1:
+  PT=PT+"X"
+
+print("PT = ",PT)
+
+
+encr=""
+i=0
+while(i<len(PT)):
+  x = np.where(pop==PT[i])
+  y = np.where(pop==PT[i+1])
+  print(PT[i],PT[i+1])
+  x=(x[0][0],x[1][0])
+  y=(y[0][0],y[1][0])
+  print(x,y)
+
+  if x[1]==y[1]:
+    print("oo")
+    encr = encr + pop[(x[0]+1)%5,x[1]]
+    encr = encr + pop[(y[0]+1)%5,y[1]]
+
+  elif x[0]==y[0]:
+    print("ll")
+    encr = encr + pop[x[0],(x[1]+1)%5]
+    encr = encr + pop[y[0],(y[1]+1)%5]
+
+  else:
+    print("pp")
+    a = (x[0],y[1])
+    b = (y[0],x[1])
+    encr = encr + pop[(a)]
+    encr = encr + pop[(b)]
+
+  i=i+2
+
+encr
+------------------------------------------------------
+pt = "GATLMZCLRQXA"
+key = "MONARCHY"
+pop = np.zeros(25)
+pop=pop.astype('str')
+
+for t in range(len(key)):
+  if key[t]=='J':
+    key[t] = 'I'
+    continue
+  pop[t] = key[t]
+
+  t=t+1
+
+for j in string.ascii_uppercase:
+  if j not in pop and j!='J':
+    if t<25:
+      pop[t] = j
+      t=t+1
+    else:
+      break
+
+pop = pop.reshape(5,5)
+
+print (pop)
+print()
+print()
+
+PT=""
+i=0
+while(i<len(pt)):
+  if i+1<len(pt):
+    if pt[i]!=pt[i+1]:
+      PT=PT+pt[i]
+      PT=PT+pt[i+1]
+      i=i+2
+    else:
+      PT=PT+pt[i]
+      PT=PT+'X'   
+      i=i+1
+  else:
+    PT=PT+pt[i]
+    i=i+1
+
+if len(PT)%2==1:
+  PT=PT+"X"
+
+print("PT = ",PT)
+
+
+encr=""
+i=0
+while(i<len(PT)):
+  x = np.where(pop==PT[i])
+  y = np.where(pop==PT[i+1])
+  print(PT[i],PT[i+1])
+  x=(x[0][0],x[1][0])
+  y=(y[0][0],y[1][0])
+  print(x,y)
+
+  if x[1]==y[1]:
+    print("oo")
+    encr = encr + pop[(x[0]-1)%5,x[1]]
+    encr = encr + pop[(y[0]-1)%5,y[1]]
+
+  elif x[0]==y[0]:
+    print("ll")
+    encr = encr + pop[x[0],(x[1]-1)%5]
+    encr = encr + pop[y[0],(y[1]-1)%5]
+
+  else:
+    print("pp")
+    a = (x[0],y[1])
+    b = (y[0],x[1])
+    encr = encr + pop[(a)]
+    encr = encr + pop[(b)]
+
+  i=i+2
+
+encr
+------------------------------------------------------
